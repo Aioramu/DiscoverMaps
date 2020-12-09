@@ -5,6 +5,7 @@ filename='maps/src/places.json'
 time=int(time.time())
 def ApiJson(time,filename):
     response=requests.get('https://kudago.com/public-api/v1.4/events/?fields=place,title,address,site_url,coords,categories&location=msk&expand=place&actual_since='+str(time))
+
     response=response.json()
     with open(filename,mode='w',encoding='utf-8') as file_object:
         json.dump(response,file_object,ensure_ascii=False)
@@ -24,7 +25,15 @@ def ApiJson(time,filename):
         else:
             break
     return Base
-
+"""
+    "type": "FeatureCollection",
+    "features": [
+        {"type": "Feature", "id": 0, "geometry": {"type": "Point", "coordinates": [55.831903, 37.411961]}, "properties": {"balloonContentHeader": "
+        <font size=3><b><a target='_blank' href='https://yandex.ru'>Здесь может быть ваша ссылка</a></b></font>", "balloonContentBody": "<p>Ваше имя: <input name='login'>
+        </p><p><em>Телефон в формате 2xxx-xxx:</em>  <input></p><p><input type='submit' value='Отправить'></p>", "balloonContentFooter":
+        "<font size=1>Информация предоставлена: </font> <strong>этим балуном</strong>", "clusterCaption": "<strong><s>Еще</s> одна</strong> метка",
+         "hintContent": "<strong>Текст  <s>подсказки</s></strong>"}},
+"""
 def AppGen(filename):
     with open(filename,'r') as file_object:
         #content=file_object.read()
@@ -32,9 +41,28 @@ def AppGen(filename):
         content=json.loads(str(file_object.read()))
         cont=content['results']
     return cont #print(content['results'][0]['site_url'])#true type of get element
+deyn={"type":"FeatureCollection"}#обязательное начало
+#deyn['features']=[{"type": "Feature", "id": 0, "geometry":{}}]#geometry=все параметры внутри кластера.обязательно "type": "Point", "coordinates": [55.831903, 37.411961]}
+deyn['features']=[]
+
 claim=ApiJson(time,filename)
+print(len(claim))
+
+for i in range(len(claim)):
+    try:
+        coor=[claim[i]['place']['coords']['lat'],claim[i]['place']['coords']['lon']]
+
+        st=claim[i]['place']['site_url']
+
+        cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":{"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+st+"'>"+claim[i]['place']['title']+"</a></b></font>",
+        "balloonContentBody":"<p>Name</p>"}}
+        deyn['features'].append(cl)
+    except:
+        pass
+print(deyn['features'][0]['geometry'],len(deyn['features']))
+
 with open(filename,'w') as file_object:
-    json.dump(claim,file_object,ensure_ascii=False)
+    json.dump(deyn,file_object,ensure_ascii=False)
 #includet test on search a real event url
 """
 i=0
