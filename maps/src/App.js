@@ -3,11 +3,13 @@ import './App.css';
 import * as fs from 'fs'
 import { YMaps, Map,GeoObject, Placemark, Polyline, Rectangle, Polygon, Circle, Clusterer, ObjectManager } from 'react-yandex-maps';
 import * as coor from "./places";
+//import * as coor from "./coords";
 var coord=new Array(coor)
 //coord.push(coor)
 //console.log(coor[0],typeof coor,typeof coord,coord[0]['default'][0])
 //console.log('sooqa',coord[231]['lon'],coord.length)
-console.log(coord[0]['default']['features'][0]['geometry'])
+console.log(coord[0]['default']['features'][50])
+console.log(coord[0]['default']['features'][51])
 const App = () => (
 
   <div class="map">
@@ -29,6 +31,7 @@ const App = () => (
       options={{
         clusterize: true,
         gridSize: 32,
+
       }}
       objects={{
         openBalloonOnClick: true,
@@ -39,7 +42,10 @@ const App = () => (
       }}
       filter={object => object.id % 2 === 0}
       defaultFeatures={coord[0]['default']['features']}
+
       modules={[
+        'objectManager.addon.clustersBalloon',
+        'objectManager.addon.clustersHint',
         'objectManager.addon.objectsBalloon',
         'objectManager.addon.objectsHint',
       ]}

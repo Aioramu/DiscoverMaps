@@ -25,7 +25,7 @@ def ApiJson(time,filename):
         else:
             break
     return Base
-"""
+"""     Documentation json response
     "type": "FeatureCollection",
     "features": [
         {"type": "Feature", "id": 0, "geometry": {"type": "Point", "coordinates": [55.831903, 37.411961]}, "properties": {"balloonContentHeader": "
@@ -40,9 +40,9 @@ def AppGen(filename):
         #print(file_object.read())
         content=json.loads(str(file_object.read()))
         cont=content['results']
-    return cont #print(content['results'][0]['site_url'])#true type of get element
+    return cont
 deyn={"type":"FeatureCollection"}#обязательное начало
-#deyn['features']=[{"type": "Feature", "id": 0, "geometry":{}}]#geometry=все параметры внутри кластера.обязательно "type": "Point", "coordinates": [55.831903, 37.411961]}
+#
 deyn['features']=[]
 
 claim=ApiJson(time,filename)
@@ -53,9 +53,9 @@ for i in range(len(claim)):
         coor=[claim[i]['place']['coords']['lat'],claim[i]['place']['coords']['lon']]
 
         st=claim[i]['place']['site_url']
-
         cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":{"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+st+"'>"+claim[i]['place']['title']+"</a></b></font>",
-        "balloonContentBody":"<p>Name</p>"}}
+        "balloonContentBody":"<p>Name</p>","clusterCaption":"<font size=3><b><a target='_blank' href='"+st+"'>"+claim[i]['place']['title']+"</a></b></font>",
+         "hintContent": "<strong>Текст  <s>подсказки</s></strong>"}}
         deyn['features'].append(cl)
     except:
         pass
@@ -63,7 +63,7 @@ print(deyn['features'][0]['geometry'],len(deyn['features']))
 
 with open(filename,'w') as file_object:
     json.dump(deyn,file_object,ensure_ascii=False)
-#includet test on search a real event url
+#include test on search a real event url
 """
 i=0
 while i <len(claim):
