@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'usercase.apps.UsercaseConfig',
     'crispy_forms',
     'rest_framework',
+    'corsheaders',
 
 ]
 """REST_FRAMEWORK = {
@@ -58,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'attrac.urls'
@@ -139,3 +142,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'maps/build/static'),
 ]
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = (
+       'http://localhost:3000',
+)
