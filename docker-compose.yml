@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432"
+  web:
+    restart: always
+    build: .
+    command: python manage.py runserver 0.0.0.0:9000
+    volumes:
+      - .:/code
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+  client:
+    build: maps/
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes:
+      - '.:/maps'
+      - '/maps/node_modules'
+    depends_on:
+      - web
+volumes:
+  node-modules:
