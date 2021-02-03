@@ -26,7 +26,9 @@ SECRET_KEY = '$jz@vi%(4pz=cwp(b0(^%k#&vy1t6e=6!xem7&k*5ha%7p++6g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+'0.0.0.0'
+]
 
 
 # Application definition
@@ -92,10 +94,10 @@ WSGI_APPLICATION = 'attrac.wsgi.application'
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-'NAME': 'users',
-'USER': 'admin',
-'PASSWORD': '228322',
-'HOST': '127.0.0.1',
+'NAME': 'postgres',
+'USER': 'postgres',
+'PASSWORD': 'postgres',
+'HOST': 'db',
 'PORT': ''
 }
 }

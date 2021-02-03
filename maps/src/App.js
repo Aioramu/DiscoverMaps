@@ -9,7 +9,8 @@ import Item from './Items';
 const axios = require('axios').default;
 const  customersService  =  new  CustomersService();
 
-const API_URL = 'http://localhost:8000';
+const API_URL = 'web';
+console.log(API_URL)
 class  CustomersList  extends  Component {
 
 constructor(props) {
@@ -61,7 +62,7 @@ class App extends Component{
   }
 
   componentDidMount() {
-    fetch("http://127.0.0.1:8000/usercase/api/item/")
+    fetch("/usercase/api/item/")
       .then(res => res.json())
       .then(
         (result) => {
