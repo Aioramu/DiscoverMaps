@@ -9,7 +9,6 @@ class Customer(models.Model):
     email = models.EmailField()
     description = models.TextField(blank=True, null=True)
     createdAt = models.DateTimeField("Created At", auto_now_add=True)
-    tags=models.TextField()
     def __str__(self):
         return self.first_name
 
@@ -18,14 +17,6 @@ class UserForm(models.Model):
     password=models.CharField(max_length=200)
     def __str__(self):
         return self.username,self.password
-"""class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-    def __str__(self):
-        return self.question_text
-    def was_published_recently(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now"""
 class GetStar(models.Model):
     likebutton=models.ManyToManyField(User,blank=True, related_name='favorites')
     def __str__(self):

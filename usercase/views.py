@@ -23,7 +23,9 @@ from .models import Customer
 from .serializer import *
 from .forms import LoginForm, RegisterForm
 starttime=time.time()
-sae=req.Slave()
+sae=req.slave()
+per=req.performance()
+nper=req.events()
 print(sae['features'][0]["properties"])
 class ArticleView(APIView):
     def get(self, request):
@@ -131,3 +133,10 @@ def customers_detail(request, pk):
 @api_view(['GET','POST'])
 def getlist(request):
     return Response({'data': sae})
+
+@api_view(['GET','POST'])
+def getperfomances(request):
+    return Response({'data':per})
+@api_view(['GET','POST'])
+def getnotperfomances(request):
+    return Response({'data':nper})

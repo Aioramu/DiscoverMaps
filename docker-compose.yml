@@ -19,15 +19,5 @@ services:
       - "9000:9000"
     depends_on:
       - db
-  client:
-    build: maps/
-    command: npm start
-    ports:
-      - "3000:3000"
-    volumes:
-      - '.:/maps'
-      - '/maps/node_modules'
-    depends_on:
-      - web
 volumes:
   node-modules:

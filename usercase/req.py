@@ -2,6 +2,7 @@ import requests
 import time
 import json
 filename='maps/src/places.json'
+filename2='places2.json'
 time=int(time.time())
 def ApiJson(time,filename):
     response=requests.get('https://kudago.com/public-api/v1.4/events/?fields=place,title,address,site_url,coords,categories&location=msk&expand=place&actual_since='+str(time))
@@ -43,7 +44,7 @@ def AppGen(filename):
     return cont
 
 
-def Slave():
+def slave():#list of all events
     deyn={"type":"FeatureCollection"}#обязательное начало
     #
     deyn['features']=[]
@@ -68,11 +69,38 @@ def Slave():
         json.dump(deyn,file_object,ensure_ascii=False)
     return deyn
 #include test on search a real event url
-"""
-i=0
-while i <len(claim):
-    #print(claim[i]['site_url'],type(claim[i]['site_url']))
-    if claim[i]['site_url']=='https://kudago.com/msk/event/vyistavka-zhivotnyie-na-monetah/':
-        print(claim[i]['title'])
-    i+=1
-    """
+def performance():
+    deyn={"type":"FeatureCollection"}#обязательное начало
+    deyn['features']=[]
+    claim=ApiJson(time,filename2)
+    for i in range(len(claim)):
+        if claim[i]['categories'][0]=='theater' or claim[i]['categories'][0]=='concert':
+            #print(claim[i]['categories'])
+            try:
+                coor=[claim[i]['place']['coords']['lat'],claim[i]['place']['coords']['lon']]
+                st=claim[i]['place']['site_url']
+                cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":{"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+claim[i]['site_url']+"'>"+claim[i]['title']+"</a></b></font>",
+                "balloonContentBody":"<p><a href='"+claim[i]['place']['site_url']+"'>"+claim[i]['place']['title']+"</a></p>"+claim[i]['place']['address']+"<p><p>"+claim[i]['place']['subway']+"</p>","clusterCaption":"<font size=3><b><p target='_blank'>"+claim[i]['title']+"</p></b></font>",
+                 "hintContent": "<strong>"+claim[i]['place']['address']+"</strong>"}}
+                deyn['features'].append(cl)
+            except:
+                pass
+    return deyn
+def events():
+    deyn={"type":"FeatureCollection"}#обязательное начало
+    deyn['features']=[]
+    claim=ApiJson(time,filename2)
+    for i in range(len(claim)):
+        if claim[i]['categories'][0]!='theater' and claim[i]['categories'][0]!='concert':
+
+            try:
+                coor=[claim[i]['place']['coords']['lat'],claim[i]['place']['coords']['lon']]
+                st=claim[i]['place']['site_url']
+                cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":{"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+claim[i]['site_url']+"'>"+claim[i]['title']+"</a></b></font>",
+                "balloonContentBody":"<p><a href='"+claim[i]['place']['site_url']+"'>"+claim[i]['place']['title']+"</a></p>"+claim[i]['place']['address']+"<p><p>"+claim[i]['place']['subway']+"</p>","clusterCaption":"<font size=3><b><p target='_blank'>"+claim[i]['title']+"</p></b></font>",
+                 "hintContent": "<strong>"+claim[i]['place']['address']+"</strong>"}}
+                deyn['features'].append(cl)
+            except:
+                pass
+    return deyn
+    #print(ApiJson(time,filename2))

@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^api/customers/$', views.customers_list),
     url(r'^api/customers/(?P<pk>[0-9]+)$', views.customers_detail),
     url(r'^api/item/$', views.getlist),
+    url(r'^api/events/$', views.getnotperfomances),
+    url(r'^api/performance/$', views.getperfomances),
 ]
