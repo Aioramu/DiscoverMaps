@@ -117,6 +117,18 @@ class App extends Component{
         }
       )
   }
+  sendlike(event){
+    console.log("231",event.target.value)
+    event.preventDefault()
+    let payload =  {"userid":1,
+    "event_id":Number(event.target.value)}
+
+    let res = axios.post('/usercase/api/like/', payload);
+
+    //let data = res.data;
+   //console.log(data);
+
+  }
 render() {
   const { error, isLoaded, items } = this.state;
 
@@ -130,6 +142,7 @@ render() {
   <div class="map">
 
   <div id="entry">
+  <p><button onClick={this.sendlike} value='"+str(i)+"'>Like</button></p>
   <form onSubmit={this.handleSubmit}>
         <label>
           Выберите событие:

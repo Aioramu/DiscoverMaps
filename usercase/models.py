@@ -21,3 +21,8 @@ class GetStar(models.Model):
     likebutton=models.ManyToManyField(User,blank=True, related_name='favorites')
     def __str__(self):
         return self.likebutton
+
+class Lovely(models.Model):
+    user=models.ForeignKey(User,related_name='recs',on_delete=models.CASCADE)
+    like=models.CharField(max_length=100)
+    tags=models.CharField(max_length=100)

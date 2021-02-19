@@ -17,40 +17,36 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 import sched, time
-
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Customer
+from .models import Customer,Lovely
 from .serializer import *
 from .forms import LoginForm, RegisterForm
+User = get_user_model()
 starttime=time.time()
 sae=req.slave()
 per=req.performance()
 nper=req.events()
-print(sae['features'][0]["properties"])
+tags=req.tags()
+#print(sae['features'][0]["properties"])
+
 class ArticleView(APIView):
     def get(self, request):
         articles = UserForm.objects.all()
         return Response({"articles": articles})
-def NewUser(request):
-    form = RegisterForm(request.POST or None)
-    if form.is_valid():
-        username = form.cleaned_data.get("username")
-        email = form.cleaned_data.get("email")
-        password = form.cleaned_data.get("password1")
-        password2 = form.cleaned_data.get("password2")
-        try:
-            user = User.objects.create_user(username, email, password)
-            print(user)
-        except:
-            user = None
-            print(user)
-        if user != None:
-            login(request, user)
-            return redirect("/")
-        else:
-            request.session['register_error'] = 1 # 1 == True
-    return render(request, "usercase/register.html", {"form": form})
 
+@api_view(['GET','POST'])
+def NewUser(request):
+    if request.method != 'POST':
+        form = UserCreationForm()
+    else:
+        form = UserCreationForm(data=request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            login(request, new_user)
+            return redirect('users:index')
+    context = {'form': form}
+    return Response({'data:':form})
+    #render(request, "usercase/register.html", {"form": form})
 
 def login_view(request):
     form = LoginForm(request.POST or None)
@@ -70,9 +66,6 @@ def login_view(request):
             request.session['invalid_user'] = 1 # 1 == True
     return render(request, "usercase/login.html", {"form": form})
 
-def like_button(request):
-   ctx={"hello":"hello"}
-   return render(request, ctx)
 @api_view(['GET','POST'])
 def customers_list(request):
     """
@@ -129,6 +122,25 @@ def customers_detail(request, pk):
     elif request.method == 'DELETE':
         customer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+@api_view(['GET','POST'])
+def like_button(request):
+    print("allowed")
+    if request.method =='POST':
+        data=[]
+        userid=request.data['userid']
+        event=request.data['event_id']
+        #print(userid,event,User.objects.all())
+        #print(get_object_or_404(User))
+        user="sda"
+        user=User.objects.get(pk=userid)
+        events="wrong event"
+        for t in tags:
+            #print(t)
+            if t['id']==event:
+                print(t['id'])
+                events=t
+        return Response({'user':str(user),'event':events})
+    return Response({'user':None,'event':None})
 
 @api_view(['GET','POST'])
 def getlist(request):
