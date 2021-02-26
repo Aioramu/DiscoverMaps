@@ -39,5 +39,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"http://0.0.0.0:9000"
+  "proxy": "http://0.0.0.0:9000"
 }

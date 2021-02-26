@@ -51,71 +51,17 @@ nextPage(){
 var fae=''
 //console.log(coord[0]['default']['features'][50])
 //console.log(coord[0]['default']['features'][51])
-class App extends Component{
+
+
+  class App extends Component{
   constructor(props) {
     super(props);
     this.state = {
       error: null,
       isLoaded: false,
-      items: [],
-      value: '/usercase/api/item'
+      value:'/usercase/api/reccomended/',
+      items: []
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.componentDidMount = this.componentDidMount.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleChange(event) {    this.setState({value: event.target.value});
-  fae=event.target.value}
-  handleSubmit(event) {
-    console.log(fae)
-    fetch(this.state.value)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          //console.log(result.data)
-          this.setState({
-            isLoaded: true,
-            items: result.data
-          });
-        },
-
-        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-        // чтобы не перехватывать исключения из ошибок в самих компонентах.
-        (error) => {
-          //console.log(this.state.items);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
-    console.log(this.state)
-  event.preventDefault();
-  //this.componentDidMount()
-}
-  componentDidMount() {
-    console.log(fae)
-    fetch(this.state.value)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          //console.log(result.data)
-          this.setState({
-            isLoaded: true,
-            items: result.data
-          });
-        },
-
-        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-        // чтобы не перехватывать исключения из ошибок в самих компонентах.
-        (error) => {
-          //console.log(this.state.items);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
   }
   sendlike(event){
     console.log("231",event.target.value)
@@ -129,10 +75,34 @@ class App extends Component{
    //console.log(data);
 
   }
+  componentDidMount() {
+    console.log("S")
+    axios.post(this.state.value,{
+    "userid":1
+}).then(res => {
+          console.log("asd",res.data)
+          this.setState({
+            isLoaded: true,
+            items: res.data
+          });
+        },
+
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          //console.log(this.state.items);
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
 render() {
   const { error, isLoaded, items } = this.state;
+  console.log('wtf',items.data)
 
-  var coord=items
+  var coord=items.data
   if (!isLoaded) {
       return <div>Загрузка...</div>;
     } else {
@@ -142,18 +112,7 @@ render() {
   <div class="map">
 
   <div id="entry">
-  <p><button onClick={this.sendlike} value='"+str(i)+"'>Like</button></p>
-  <form onSubmit={this.handleSubmit}>
-        <label>
-          Выберите событие:
-          <select value={this.state.value} onChange={this.handleChange}>
-            <option value="/usercase/api/item">Все</option>
-            <option value="/usercase/api/events">События</option>
-            <option value="/usercase/api/performance">Спектакли</option>
-          </select>
-        </label>
-        <input type="submit" value="Отправить" />
-      </form>
+
     <center>
     <a href="http://127.0.0.1:8000/usercase/login/">Войти </a>
     <a href="http://127.0.0.1:8000/usercase/registration">Зарегестрироваться</a>
