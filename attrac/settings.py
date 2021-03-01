@@ -27,7 +27,7 @@ SECRET_KEY = '$jz@vi%(4pz=cwp(b0(^%k#&vy1t6e=6!xem7&k*5ha%7p++6g'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-'0.0.0.0'
+'*'
 ]
 
 

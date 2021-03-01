@@ -9,7 +9,7 @@ import Item from './Items';
 const axios = require('axios').default;
 const  customersService  =  new  CustomersService();
 
-const API_URL = 'http://localhost:9 000';
+const API_URL = 'http://0.0.0.0:9000';
 var fae=''
 //console.log(coord[0]['default']['features'][50])
 //console.log(coord[0]['default']['features'][51])
@@ -32,7 +32,7 @@ nameChange(event) {    this.setState({name: event.target.value});  }
  emailChange(event) {    this.setState({email: event.target.value});  }
   pasChange(event) {    this.setState({pas: event.target.value});  }
   register(event){
-    axios.post('/usercase/api/reg/',{
+    axios.post(API_URL+'/usercase/api/reg/',{
 "username":this.state.name,
 "password":this.state.pas,
 "email":this.state.email
@@ -59,7 +59,7 @@ class Events extends Component{
     };
   }
   componentDidMount() {
-    axios.get("/usercase/api/events/").then(res => {
+    axios.get(API_URL+"/usercase/api/events/").then(res => {
           this.setState({
             isLoaded: true,
             items: res.data
@@ -133,7 +133,7 @@ class Recom extends Component{
   componentDidMount() {
     axios({
   method: 'get',
-  url: "/usercase/api/reccomended/",
+  url: API_URL+"/usercase/api/reccomended/",
   responseType: 'stream',
   headers:{"Authorization":'Token '+localStorage.getItem("token")
 
@@ -207,7 +207,7 @@ class App extends Component{
     this.state = {
       error: null,
       isLoaded: false,
-      value:'/usercase/api/item/',
+      value:API_URL+'/usercase/api/item/',
       items: [],
       showPopup: false,
       showEvents:false,
@@ -221,22 +221,6 @@ class App extends Component{
     this.nameChange = this.nameChange.bind(this);
     this.pasChange = this.pasChange.bind(this);
   }
-  /*sendlike(event){
-    console.log("sooqa",event.target.value)
-    axios({
-  method: 'post',
-  url: "/usercase/api/like/",
-  responseType: 'stream',
-  headers:{"Authorization":'Token '+localStorage.getItem("token"),
-  data:{"event_id":event.target.value}
-}
-})
-    event.preventDefault()
-
-    //let data = res.data;
-   //console.log(data);
-
- }*/
   componentDidMount() {
     axios.get(this.state.value,).then(res => {
           this.setState({
@@ -277,8 +261,8 @@ class App extends Component{
   }
   login(event) {
   var data={"username":this.state.login,"password":this.state.password}
-  axios.post('/usercase/auth/token/login/',data).then(res => {
-    console.log("auuu",res.data.auth_token)
+  axios.post(API_URL+'/usercase/auth/token/login/',data).then(res => {
+
       localStorage.setItem("token",res.data.auth_token)
         this.setState({
           isLoaded: true,
@@ -296,18 +280,35 @@ class App extends Component{
         });
       }
     )
-    event.preventDefault()
+    //event.preventDefault()
   }
+  logout(){
+    axios({
+  method: 'post',
+  url: API_URL+"/usercase/auth/token/logout/",
+  responseType: 'stream',
+  headers:{"Authorization":'Token '+localStorage.getItem("token")
+  }
+});
+}
   toggleAuth() {
     this.setState({
       showLogin:!this.state.showLogin
+    });
+  }
+  toggleAll() {
+    this.setState({
+      showAll:true,
+      showEvents: false,
+      showRecs:false,
     });
   }
   nameChange(event) {    this.setState({login: event.target.value});  }
   pasChange(event) {    this.setState({password: event.target.value});  }
 render() {
   const { error, isLoaded, items } = this.state;
-  //console.log("token",localStorage.getItem("token"))
+  console.log(this.state.value)
+  console.log(this.state.items)
   var coord=items.data
   if (!isLoaded) {
       return <div>Загрузка...</div>;
@@ -316,7 +317,7 @@ render() {
 
   <div class="map">
   <div id="entry">
-
+      <a href="#" onClick={this.logout}>Выйти</a>
     <center>
     <a href="#" onClick={this.togglePopup.bind(this)}>Зарегестрироваться</a>
     &nbsp;
@@ -334,6 +335,7 @@ render() {
   />
   : null
 }
+    <a href="#" onClick={this.toggleAll.bind(this)}> Все события</a>
     <a href="#" onClick={this.toggleEvents.bind(this)}> Мероприятия</a>
     <a href="#" onClick={this.toggleRecs.bind(this)}> Специально для вас</a>
     </center>

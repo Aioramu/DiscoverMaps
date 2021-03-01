@@ -19,5 +19,11 @@ services:
       - "9000:9000"
     depends_on:
       - db
+  client:
+    build: ./maps
+
+    ports:
+      - "80:80"
+    container_name: maps
 volumes:
   node-modules:
