@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import APIView
 from rest_framework import status
 from . import req
+from django.contrib.auth.models import User
 from collections import Counter
 # Create your views here.
 from rest_framework.response import Response
@@ -28,16 +29,17 @@ tags=req.tags()
 
 @api_view(['GET','POST'])
 def NewUser(request):
-    if request.method != 'POST':
-        form = UserCreationForm()
-    else:
-        form = UserCreationForm(data=request.POST)
-        if form.is_valid():
-            new_user = form.save()
-            login(request, new_user)
-            return redirect('users:index')
-    context = {'form': form}
-    return render(request, "users/register.html",context)
+    if request.method == 'POST':
+
+        data={'user':request.data['username'],'password':request.data['password'],'email':request.data['email']}
+
+        try:
+            user = User.objects.create_user(request.data['username'], request.data['email'], request.data['password'])
+            print(user)
+            return Response({'data':user})
+        except:
+            return Response({'data':'error 404'})
+    return Response({'data':"nothing"})
 @api_view(['GET','POST'])
 def like_button(request):
     #print("allowed")
@@ -106,7 +108,7 @@ def reclist(request):
         for i in sae['features']:
             if int(i['id']) in ids:
                 ban.append(i)
-        
+
         return Response({'data':{"type": "FeatureCollection",
         "features":ban}})
     return Response({'data':"invalid user or request"})
