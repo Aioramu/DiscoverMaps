@@ -22,23 +22,29 @@ import sched, time
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Lovely
 from .serializer import *
-import sys
 
 User = get_user_model()
-starttime=time.time()
-sae=req.slave()
-per=req.performance()
-nper=req.events()
-tags=req.tags()
-#authentication_classes = [SessionAuthentication, BasicAuthentication]
-#permission_classes = [IsAuthenticated]
-#print(sae['features'][0]["properties"])
+
+nper={"none":"none"}
+sae={"none":"none"}
+per={"none":"none"}
+tags={"none":"none"}
+def Pivo():#need server timer!
+    print("chooo")
+    global nper,per,sae,tags
+    sae=req.slave()
+    per=req.performance()
+    nper=req.events()
+    tags=req.tags()
+Pivo()
+
+
+
+
 class ExampleView(APIView):
-    #authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]#only for auth user
 
     def get(self, request, format=None):
-    #def reclist(self,request,format=None):
         print('u')
         if request.method!='POST':
             print(request.user)
@@ -83,7 +89,7 @@ class ExampleView(APIView):
             return Response({'data':{"type": "FeatureCollection",
             "features":ban}})
 
-@api_view(['GET','POST'])
+@api_view(['GET','POST'])#registration on base django model
 def NewUser(request):
     if request.method == 'POST':
 
@@ -97,17 +103,19 @@ def NewUser(request):
             return Response({'data':'error 404'})
     return Response({'data':"nothing"})
 @api_view(['GET','POST'])
-def like_button(request):
+def like_button(request):#request to lie button
     #print("allowed")
+    permission_classes = [permissions.IsAuthenticated]
     if request.method =='POST':
         data=[]
-        userid=request.data['userid']
-        event=request.data['event_id']
+        userid=request.user#based on user token
+        #print(request.data)
+        event=request.data['event_id']#comes from post request body
         like=Lovely.objects.all()
         #print(userid,event,User.objects.all())
         #print(get_object_or_404(User))
         user="sda"
-        user=User.objects.get(pk=userid)
+        user=User.objects.get(username=userid)
         events="wrong event"
         for t in tags:
             if t['id']==event:

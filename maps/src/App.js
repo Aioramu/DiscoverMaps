@@ -34,8 +34,8 @@ nameChange(event) {    this.setState({name: event.target.value});  }
   register(event){
     axios.post('/usercase/api/reg/',{
 "username":this.state.name,
-"password":this.state.email,
-"email":this.state.pas
+"password":this.state.pas,
+"email":this.state.email
 }).then(res => {
          alert("hello",res.data)
   })}
@@ -221,18 +221,22 @@ class App extends Component{
     this.nameChange = this.nameChange.bind(this);
     this.pasChange = this.pasChange.bind(this);
   }
-  sendlike(event){
-    console.log("231",event.target.value)
+  /*sendlike(event){
+    console.log("sooqa",event.target.value)
+    axios({
+  method: 'post',
+  url: "/usercase/api/like/",
+  responseType: 'stream',
+  headers:{"Authorization":'Token '+localStorage.getItem("token"),
+  data:{"event_id":event.target.value}
+}
+})
     event.preventDefault()
-    let payload =  {"userid":1,
-    "event_id":Number(event.target.value)}
-
-    let res = axios.post('/usercase/api/like/', payload);
 
     //let data = res.data;
    //console.log(data);
 
-  }
+ }*/
   componentDidMount() {
     axios.get(this.state.value,).then(res => {
           this.setState({
@@ -311,7 +315,6 @@ render() {
   return(
 
   <div class="map">
-
   <div id="entry">
 
     <center>

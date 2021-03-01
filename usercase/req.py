@@ -117,8 +117,11 @@ def events():
             try:
                 coor=[claim[i]['place']['coords']['lat'],claim[i]['place']['coords']['lon']]
                 st=claim[i]['place']['site_url']
-                cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":{"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+claim[i]['site_url']+"'>"+claim[i]['title']+"</a></b></font>",
-                "balloonContentBody":"<p><a href='"+claim[i]['place']['site_url']+"'>"+claim[i]['place']['title']+"</a></p>"+claim[i]['place']['address']+"<p><p>"+claim[i]['place']['subway']+"</p>","clusterCaption":"<font size=3><b><p target='_blank'>"+claim[i]['title']+"</p></b></font>",
+                cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":
+                {"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+claim[i]['site_url']+"'>"+claim[i]['title']+"</a></b></font>",
+                "balloonContentBody":"<p><a href='"+claim[i]['place']['site_url']+"'>"+claim[i]['place']['title']+"</a></p>"+claim[i]['place']['address']+"<p><p>"
+                +claim[i]['place']['subway']+"</p><p><button onClick=sendlike() value='"+str(i)+"'>Like</button></p>","clusterCaption":"<font size=3><b><p target='_blank'>"
+                +claim[i]['title']+"</p></b></font>",
                  "hintContent": "<strong>"+claim[i]['place']['address']+"</strong>"}}
                 deyn['features'].append(cl)
             except:
