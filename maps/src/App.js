@@ -131,8 +131,13 @@ class Recom extends Component{
     };
   }
   componentDidMount() {
-    axios.post("/usercase/api/reccomended/",{
-    "userid":1
+    axios({
+  method: 'get',
+  url: "/usercase/api/reccomended/",
+  responseType: 'stream',
+  headers:{"Authorization":'Token '+localStorage.getItem("token")
+
+  }
 }).then(res => {
       this.setState({
         isLoaded: true,
@@ -196,6 +201,7 @@ class Recom extends Component{
 }
 }
 class App extends Component{
+
   constructor(props) {
     super(props);
     this.state = {
@@ -207,8 +213,13 @@ class App extends Component{
       showEvents:false,
       showAll:true,
       showRecs:false,
+      token:'',
+      login:'',
+      password:'',
     };
-
+    this.login = this.login.bind(this);
+    this.nameChange = this.nameChange.bind(this);
+    this.pasChange = this.pasChange.bind(this);
   }
   sendlike(event){
     console.log("231",event.target.value)
@@ -260,10 +271,39 @@ class App extends Component{
       showRecs:true,
     });
   }
+  login(event) {
+  var data={"username":this.state.login,"password":this.state.password}
+  axios.post('/usercase/auth/token/login/',data).then(res => {
+    console.log("auuu",res.data.auth_token)
+      localStorage.setItem("token",res.data.auth_token)
+        this.setState({
+          isLoaded: true,
+          token: res.data.auth_token
+        });
+      },
 
+      // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+      // чтобы не перехватывать исключения из ошибок в самих компонентах.
+      (error) => {
+        //console.log(this.state.items);
+        this.setState({
+          isLoaded: true,
+          error
+        });
+      }
+    )
+    event.preventDefault()
+  }
+  toggleAuth() {
+    this.setState({
+      showLogin:!this.state.showLogin
+    });
+  }
+  nameChange(event) {    this.setState({login: event.target.value});  }
+  pasChange(event) {    this.setState({password: event.target.value});  }
 render() {
   const { error, isLoaded, items } = this.state;
-
+  //console.log("token",localStorage.getItem("token"))
   var coord=items.data
   if (!isLoaded) {
       return <div>Загрузка...</div>;
@@ -275,9 +315,15 @@ render() {
   <div id="entry">
 
     <center>
-    <a href="#" onClick={this.togglePopup.bind(this)}>Войти</a>
-
-    <a href="#" onClick={"Извините,пока недоступно :("}> Зарегестрироваться</a>
+    <a href="#" onClick={this.togglePopup.bind(this)}>Зарегестрироваться</a>
+    &nbsp;
+    <a href="#" onClick={this.toggleAuth.bind(this)}>Войти</a>
+    {this.state.showLogin ?
+      <div><form onSubmit={this.login}>
+         Никнейм:<input type="text" value={this.state.login} onChange={this.nameChange} />
+         Пароль:<input type="password" value={this.state.password} onChange={this.pasChange} />
+         <input type="submit" value="Отправить" />
+         </form></div> :null}
     {this.state.showPopup ?
   <Popup
     text='Close Me'

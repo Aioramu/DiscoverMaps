@@ -4,3 +4,5 @@ djangorestframework
 django-cors-headers
 django-crispy-forms
 requests
+djoser
+djangorestframework_simplejwt
