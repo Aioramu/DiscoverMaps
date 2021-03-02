@@ -5,15 +5,15 @@ import { YMaps, Map,GeoObject, Placemark, Polyline, Rectangle, Polygon, Circle, 
 import * as coor from "./places";
 import  React, { Component } from  'react';
 import  CustomersService  from  './ClientUp';
-import Item from './Items';
+
 const axios = require('axios').default;
 const  customersService  =  new  CustomersService();
 
-const API_URL = 'http://0.0.0.0:9000';
+const API_URL = 'http://localhost:9000';
 var fae=''
 //console.log(coord[0]['default']['features'][50])
 //console.log(coord[0]['default']['features'][51])
-class Popup extends React.Component {
+  class Popup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

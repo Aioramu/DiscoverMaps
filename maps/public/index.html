@@ -31,12 +31,13 @@
       console.log("sooqa",event.target.value)
       axios({
     method: 'post',
-    url: "/usercase/api/like/",
+    url: "http://localhost:9000/usercase/api/like/",
     responseType: 'stream',
-    headers:{"Authorization":'Token '+localStorage.getItem("token"),
-    data:{"event_id":event.target.value}
-  }
-  })
+    headers:{"Authorization":'Token '+localStorage.getItem("token")},
+    data:{"event_id":Number(event.target.value)}
+  }).then(res => {
+           console.log(res.data)
+    })
     }
     </script>
   </head>
