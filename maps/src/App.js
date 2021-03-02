@@ -85,10 +85,10 @@ class Events extends Component{
     return( <YMaps >
   <Map
     defaultState={{
-      center: [55.751574, 37.573856],
-      zoom: 10,
+      center: [55.751605, 37.621508],
+      zoom: 12,
     }}
-    width={1500} height={800}>
+    width={"100%"} height={800}>
     <ObjectManager
       options={{
         clusterDisableClickZoom: true,
@@ -164,10 +164,12 @@ class Recom extends Component{
     return( <YMaps >
   <Map
     defaultState={{
-      center: [55.751574, 37.573856],
-      zoom: 10,
+      center: [55.751605, 37.621508],
+      zoom: 13,
     }}
-    width={1500} height={800}>
+    //bigMap =! bigMap
+    width={"100%"} height={750}
+    >
     <ObjectManager
       options={{
         clusterDisableClickZoom: true,
@@ -349,10 +351,10 @@ render() {
   {this.state.showAll ?<YMaps >
   <Map
     defaultState={{
-      center: [55.751574, 37.573856],
-      zoom: 10,
+      center: [55.751605, 37.621508],
+      zoom: 12,
     }}
-    width={1500} height={800}>
+    width={"100%"} height={800}>
     <ObjectManager
       options={{
         clusterDisableClickZoom: true,
