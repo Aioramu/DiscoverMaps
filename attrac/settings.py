@@ -181,8 +181,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'maps/build/static'),
 ]
-CORS_ORIGIN_ALLOW_ALL = False
+#CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = (
-       'http://localhost:3000',
-)
+"""CORS_ORIGIN_WHITELIST = (
+       '*',
+)"""
+CORS_ALLOW_ALL_ORIGINS=True
+
+"""CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://185.244.172.149/",
+
+]"""
