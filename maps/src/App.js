@@ -244,7 +244,8 @@ class App extends Component{
   }
   togglePopup() {
     this.setState({
-      showPopup: !this.state.showPopup
+      showPopup: !this.state.showPopup,
+      showLogin:false,
     });
   }
   toggleEvents() {
@@ -295,7 +296,8 @@ class App extends Component{
 }
   toggleAuth() {
     this.setState({
-      showLogin:!this.state.showLogin
+      showLogin:!this.state.showLogin,
+      showPopup:false,
     });
   }
   toggleAll() {
@@ -319,11 +321,15 @@ render() {
 
   <div class="map">
   <div id="entry">
-      <a href="#" onClick={this.logout}>Выйти</a>
+
     <center>
-    <a href="#" onClick={this.togglePopup.bind(this)}>Зарегестрироваться</a>
+    <a href="#" onClick={this.logout}>Выйти</a>
     &nbsp;
-    <a href="#" onClick={this.toggleAuth.bind(this)}>Войти</a>
+    &nbsp;
+    &nbsp;
+    <a href="#" onClick={this.togglePopup.bind(this)}>Зарегестрироваться</a>
+
+    <a href="#" onClick={this.toggleAuth.bind(this)}> Войти</a>
     {this.state.showLogin ?
       <div><form onSubmit={this.login}>
          Никнейм:<input type="text" value={this.state.login} onChange={this.nameChange} />

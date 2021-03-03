@@ -45,9 +45,9 @@ class ExampleView(APIView):
     permission_classes = [permissions.IsAuthenticated]#only for auth user
 
     def get(self, request, format=None):
-        print('u')
+        #print('u')
         if request.method!='POST':
-            print(request.user)
+            #print(request.user)
             userid=request.user
             user=User.objects.get(username=userid)
             rec=Lovely.objects.filter(user=user)
@@ -57,35 +57,59 @@ class ExampleView(APIView):
                 tag.append(r.tags)
                 if r.like!='':
                     cat.append(r.like)
-            a=dict((x, tag.count(x)) for x in set(tag) if tag.count(x) > 1)
-            b=dict((x, cat.count(x)) for x in set(cat) if cat.count(x) > 1)
-            back,v,ass={'sb':0},{'sa':0},{'nein':0}
+            a={}
+            for i in tag:
+                if i!='новое на сайте':
+                    if i in a.keys():
+                        a[i]+=1
+                    else:
+                        a[i]=1
+            b={}
+            for i in cat:
+                if i in b.keys():
+                    b[i]+=1
+                else:
+                    b[i]=1
+            back,v,ass,billy={'sb':0},{'sa':0},{'nein':0},{'sda':1}
+            choo=''
+            r=0
+            f=1
+            c=0
             for i,j in a.items():
-                с=0
-                f=1
-                if j>с:
+                if j>r:
+
                     v=i
-                    с=j
-                elif f<j<=c:
+                    r=j
+                elif f<j<=r:
                     f=j
                     back=i
+                elif c<j<=f:
+                    c=j
+                    choo=i
+            r=0
+            f=1
             for i,j in b.items():
-                с=0
-                if j>с:
+                if j>r:
                     ass=i
-                    с=j
+                    r=j
+                elif f<j<=r:
+                    f=j
+                    billy=i
             ids=[]
+            counter=0
             for i in tags:
                 for t in i['tags']:
-                    if t==v or i==back:
+                    if t==v or t==back: #or t==choo:
                         for p in i['categories']:
                             if p==ass:
+                                counter+=1
                                 ids.append(int(i['id']))
+            print(counter)
             ban=[]
             for i in sae['features']:
                 if int(i['id']) in ids:
                     ban.append(i)
-
+            #print(ban)
             return Response({'data':{"type": "FeatureCollection",
             "features":ban}})
 
