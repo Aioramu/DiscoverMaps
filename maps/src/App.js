@@ -160,46 +160,51 @@ class Recom extends Component{
     const { error, isLoaded, items } = this.state;
     //console.log(this.state.items,this.state.items.data)
     var coord=items.data
-    console.log(coord)
-    return( <YMaps >
-  <Map
-    defaultState={{
-      center: [55.751605, 37.621508],
-      zoom: 13,
-    }}
-    //bigMap =! bigMap
-    width={"100%"} height={750}
-    >
-    <ObjectManager
-      options={{
-        clusterDisableClickZoom: true,
-        clusterize: true,
-        gridSize: 32,
-
+    //console.log(localStorage.getItem("token"))
+    if (localStorage.getItem("token") !='') {
+      return( <YMaps >
+    <Map
+      defaultState={{
+        center: [55.751605, 37.621508],
+        zoom: 13,
       }}
-      objects={{
-        clusterDisableClickZoom: true,
-        openBalloonOnClick: true,
-        preset: 'islands#greenDotIcon',
-      }}
-      clusters={{
-        clusterDisableClickZoom: true,
-        preset: 'islands#redClusterIcons',
-      }}
-      filter={object => object.id % 2 === 0}
+      //bigMap =! bigMap
+      width={"100%"} height={750}
+      >
+      <ObjectManager
+        options={{
+          clusterDisableClickZoom: true,
+          clusterize: true,
+          gridSize: 32,
 
-      //defaultFeatures={this.state.items['features']}
+        }}
+        objects={{
+          clusterDisableClickZoom: true,
+          openBalloonOnClick: true,
+          preset: 'islands#greenDotIcon',
+        }}
+        clusters={{
+          clusterDisableClickZoom: true,
+          preset: 'islands#redClusterIcons',
+        }}
+        filter={object => object.id % 2 === 0}
 
-      defaultFeatures={coord}
-      modules={[
-        'objectManager.addon.clustersBalloon',
-        'objectManager.addon.clustersHint',
-        'objectManager.addon.objectsBalloon',
-        'objectManager.addon.objectsHint',
-      ]}
-    />
-  </Map>
-</YMaps>);
+        //defaultFeatures={this.state.items['features']}
+
+        defaultFeatures={coord}
+        modules={[
+          'objectManager.addon.clustersBalloon',
+          'objectManager.addon.clustersHint',
+          'objectManager.addon.objectsBalloon',
+          'objectManager.addon.objectsHint',
+        ]}
+      />
+    </Map>
+  </YMaps>);
+}
+else{
+  return (<center><p> Извините,но вам надо авторизоваться,чтобы посмотреть рекомендации</p></center>)
+}
 }
 }
 class App extends Component{
@@ -272,7 +277,7 @@ class App extends Component{
           token: res.data.auth_token
         });
       },
-
+      //window.location.reload(),
       // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
       // чтобы не перехватывать исключения из ошибок в самих компонентах.
       (error) => {
@@ -293,6 +298,10 @@ class App extends Component{
   headers:{"Authorization":'Token '+localStorage.getItem("token")
   }
 });
+
+localStorage.setItem("token",'')
+window.location.reload()
+
 }
   toggleAuth() {
     this.setState({
