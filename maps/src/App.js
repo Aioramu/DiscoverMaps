@@ -327,7 +327,7 @@ render() {
     &nbsp;
     &nbsp;
     &nbsp;
-    <a href="#" onClick={this.togglePopup.bind(this)}>Зарегестрироваться</a>
+    <a href="#" onClick={this.togglePopup.bind(this)}>Зарегистрироваться</a>
 
     <a href="#" onClick={this.toggleAuth.bind(this)}> Войти</a>
     {this.state.showLogin ?
