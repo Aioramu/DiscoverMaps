@@ -14,8 +14,8 @@
 #### Supplementary part
 - [ ] Frontend bugs fix
 - [ ] Frontend design
-- [ ] Like button cleaning
-- [ ] Alternative Recommendation system
+- [x] Like button cleaning
+- [x] Alternative Recommendation system
 # Данный проект это общая карта Москвы с разными событиями,отображенными на ней.
 ## Используемое на данный момент API:yandex maps,kudago
 # Технологии: Python Django,React js. npm(npx) packets.

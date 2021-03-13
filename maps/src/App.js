@@ -131,14 +131,15 @@ class Recom extends Component{
     };
   }
   componentDidMount() {
+    console.log(localStorage.getItem("token"))
     axios({
   method: 'get',
   url: API_URL+"/usercase/api/reccomended/",
   responseType: 'stream',
   headers:{"Authorization":'Token '+localStorage.getItem("token")
-
   }
 }).then(res => {
+  console.log(res.data)
       this.setState({
         isLoaded: true,
         items: res.data
