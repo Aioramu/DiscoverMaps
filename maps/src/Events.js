@@ -1,5 +1,14 @@
-import  React, { Component } from  'react';
+
+import './App.css';
+import * as fs from 'fs'
 import { YMaps, Map,GeoObject, Placemark, Polyline, Rectangle, Polygon, Circle, Clusterer, ObjectManager } from 'react-yandex-maps';
+import * as coor from "./places";
+import  React, { Component } from  'react';
+const axios = require('axios').default;
+
+
+const API_URL = 'http://localhost:9000';
+var fae=''
 
 class Events extends Component{
   constructor(props) {
@@ -7,19 +16,14 @@ class Events extends Component{
     this.state = {
       error: null,
       isLoaded: false,
-      items: []
+      items: [],
     };
   }
-
   componentDidMount() {
-    fetch("/usercase/api/events")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          console.log(result.data)
+    axios.get(API_URL+"/usercase/api/events/").then(res => {
           this.setState({
             isLoaded: true,
-            items: result.data
+            items: res.data
           });
         },
 
@@ -34,34 +38,18 @@ class Events extends Component{
         }
       )
   }
-render() {
-  const { error, isLoaded, items } = this.state;
-  //console.log('wtf',this.state.items)
-
-  var coord=items
-  if (!isLoaded) {
-      return <div>Загрузка...</div>;
-
-    } else {
-      console.log(coord['features'])
-  return(
-
-
-  <div class="map">
-  <div id="entry">
-    <center>
-    <a href="http://127.0.0.1:8000/usercase/login/">Войти </a>
-    <a href="http://127.0.0.1:8000/usercase/registration">Зарегестрироваться</a>
-    </center>
-  </div>
-  <YMaps >
-  {console.log(coord)}
+  render() {
+    const { error, isLoaded, items } = this.state;
+    //console.log(this.state.items,this.state.items.data)
+    var coord=items.data
+    console.log(coord)
+    return( <YMaps >
   <Map
     defaultState={{
-      center: [55.751574, 37.573856],
-      zoom: 10,
+      center: [55.751605, 37.621508],
+      zoom: 12,
     }}
-    width={1500} height={800}>
+    width={"100%"} height={800}>
     <ObjectManager
       options={{
         clusterDisableClickZoom: true,
@@ -80,9 +68,9 @@ render() {
       }}
       filter={object => object.id % 2 === 0}
 
-      //defaultFeatures={this.state.items}
+      //defaultFeatures={this.state.items['features']}
 
-      defaultFeatures={coord['features']}
+      defaultFeatures={coord}
       modules={[
         'objectManager.addon.clustersBalloon',
         'objectManager.addon.clustersHint',
@@ -91,10 +79,7 @@ render() {
       ]}
     />
   </Map>
-</YMaps>
-</div>
-);
-}
+</YMaps>);
 }
 }
 export default Events;

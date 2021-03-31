@@ -121,10 +121,10 @@ def NewUser(request):
 
         try:
             user = User.objects.create_user(request.data['username'], request.data['email'], request.data['password'])
-            print(user)
-            return Response({'data':user})
+            print("user",str(user))
+            return Response({'data':"welcome"})
         except:
-            return Response({'data':'error 404'})
+            return Response({'data':'Error:User exist or something goes wrong!'})
     return Response({'data':"nothing"})
 @api_view(['GET','POST'])
 def delete_like(request):

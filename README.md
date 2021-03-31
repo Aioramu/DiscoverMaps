@@ -12,7 +12,7 @@
 - [x] Recommendation system based on likes button
 - [x] Client on React
 #### Supplementary part
-- [ ] Frontend bugs fix
+- [x] Frontend bugs fix
 - [ ] Frontend design
 - [x] Like button cleaning
 - [x] Alternative Recommendation system
