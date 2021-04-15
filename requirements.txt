@@ -7,3 +7,6 @@ requests
 djoser
 djangorestframework_simplejwt
 schedule
+redis
+celery
+django-celery-results

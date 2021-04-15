@@ -18,11 +18,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-import sched, time
+import sched, time,datetime, threading
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Lovely
+from .models import Lovely,Prefer
 from .serializer import *
-
+from .tasks import create_recs
 User = get_user_model()
 
 nper={"none":"none"}
@@ -39,8 +39,6 @@ def Pivo():#need server timer!
 Pivo()
 
 
-
-
 class ExampleView(APIView):
     permission_classes = [permissions.IsAuthenticated]#only for auth user
 
@@ -50,61 +48,22 @@ class ExampleView(APIView):
             #print(request.user)
             userid=request.user
             user=User.objects.get(username=userid)
-            rec=Lovely.objects.filter(user=user)
-            tag=[]
-            cat=[]
-            for r in rec:
-                tag.append(r.tags)
-                if r.like!='':
-                    cat.append(r.like)
-            a={}
-            for i in tag:
-                if i!='новое на сайте':
-                    if i in a.keys():
-                        a[i]+=1
-                    else:
-                        a[i]=1
-            b={}
-            for i in cat:
-                if i in b.keys():
-                    b[i]+=1
-                else:
-                    b[i]=1
-            back,v,ass,billy={'sb':0},{'sa':0},{'nein':0},{'sda':1}
-            choo=''
-            r=0
-            f=1
-            c=0
-            for i,j in a.items():
-                if j>r:
-
-                    v=i
-                    r=j
-                elif f<j<=r:
-                    f=j
-                    back=i
-                elif c<j<=f:
-                    c=j
-                    choo=i
-            r=0
-            f=1
-            for i,j in b.items():
-                if j>r:
-                    ass=i
-                    r=j
-                elif f<j<=r:
-                    f=j
-                    billy=i
+            rec=Prefer.objects.get(user=user)
+            v=str(rec.tag1)
+            back=str(rec.tag2)
+            ass=str(rec.category1)
+            billy=str(rec.category1)
             ids=[]
             counter=0
             for i in tags:
                 for t in i['tags']:
-                    if t==v or t==back: #or t==choo:
+                    if t==v or t==back:
                         for p in i['categories']:
-                            if p==ass:
+                            if p==ass or p==billy:
+                                print("С",p)
                                 counter+=1
                                 ids.append(int(i['id']))
-            print(counter)
+
             ban=[]
             for i in sae['features']:
                 if int(i['id']) in ids:
@@ -161,6 +120,8 @@ def recomendationV2(request):
                 b[i]+=1
             else:
                 b[i]=1
+
+
         back,v,ass,billy={'sb':0},{'sa':0},{'nein':0},{'sda':1}
         choo=''
         r=0
@@ -195,7 +156,6 @@ def recomendationV2(request):
                         if p==ass or p==billy:
                             counter+=1
                             ids.append(int(i['id']))
-        print(counter)
         ban=[]
         for i in sae['features']:
             if int(i['id']) in ids:
@@ -230,6 +190,8 @@ def like_button(request):#request to lie button
                         except:
                             like.create(user=user,tags=i)
                 events=t
+
+        create_recs.delay(userid.username)
         return Response({'user':str(user),'event':events})
     return Response({'user':None,'event':None})
 #@api_view(['GET','POST'])

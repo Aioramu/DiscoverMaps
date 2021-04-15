@@ -25,5 +25,7 @@ services:
     ports:
       - "80:80"
     container_name: maps
+  redis:
+    image: redis:5
 volumes:
   node-modules:

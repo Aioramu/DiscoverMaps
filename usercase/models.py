@@ -9,4 +9,13 @@ from django.utils import timezone
 class Lovely(models.Model):
     user=models.ForeignKey(User,related_name='recs',on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published',default=timezone.now)
-    tags=models.CharField(max_length=100)
+    like=models.CharField(max_length=100,default="")
+    tags=models.CharField(max_length=100,default="")
+
+
+class Prefer(models.Model):
+    user=models.ForeignKey(User,related_name='pref',on_delete=models.CASCADE)
+    tag1=models.CharField(max_length=100,default="")
+    tag2=models.CharField(max_length=100,default="")
+    category1=models.CharField(max_length=100,default="")
+    category2=models.CharField(max_length=100,default="")
