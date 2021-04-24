@@ -27,5 +27,17 @@ services:
     container_name: maps
   redis:
     image: redis:5
+  celery:
+    build: .
+    container_name: 'demo_app_celery'
+    command: celery -A usercase worker -B
+    volumes:
+      - .:/code
+    links:
+      - redis
+    depends_on:
+      - web
+      - redis
+
 volumes:
   node-modules:

@@ -4,8 +4,6 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from rest_framework.response import Response
-from rest_framework.decorators import APIView
 from rest_framework import status, permissions
 from . import req
 from django.contrib.auth.models import User
@@ -14,28 +12,29 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# Create your views here.
-from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-import sched, time,datetime, threading
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Lovely,Prefer
 from .serializer import *
 from .tasks import create_recs
+from datetime import date
+
+#today = date.today()
 User = get_user_model()
 
 nper={"none":"none"}
 sae={"none":"none"}
 per={"none":"none"}
 tags={"none":"none"}
+data=1
 def Pivo():#need server timer!
     print("chooo")
     global nper,per,sae,tags
-    sae=req.slave()
-    per=req.performance()
-    nper=req.events()
-    tags=req.tags()
+    sae=req.slave()#all what you wants
+    per=req.performance()#include theater and concerts
+    nper=req.events()#exclude theater and concerts
+    tags=req.tags()#all ids with category and tags
 Pivo()
 
 
@@ -198,10 +197,16 @@ def like_button(request):#request to lie button
 
 @api_view(['GET','POST'])
 def getlist(request):
+    global data
+    today=date.today()
+    today=today.strftime("%d")
+    if data!=int(today):
+        data=int(today)
+        Pivo()
     return Response({'data': sae})
 
 @api_view(['GET','POST'])
-def getperfomances(request):
+def getperfomances(request):#only pers
     return Response({'data':per})
 @api_view(['GET','POST'])
 def getnotperfomances(request):
