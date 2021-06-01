@@ -27,14 +27,20 @@ nper={"none":"none"}
 sae={"none":"none"}
 per={"none":"none"}
 tags={"none":"none"}
+theater={"none":"none"}
+kids={"none":"none"}
+festival={"none":"none"}
 data=1
 def Pivo():#need server timer!
     print("chooo")
-    global nper,per,sae,tags
+    global nper,per,sae,tags,theater,kids,festival
     sae=req.slave()#all what you wants
     per=req.performance()#include theater and concerts
     nper=req.events()#exclude theater and concerts
     tags=req.tags()#all ids with category and tags
+    theater=req.theater()
+    kids=req.kids()
+    festival=req.festival()
 Pivo()
 
 
@@ -211,3 +217,12 @@ def getperfomances(request):#only pers
 @api_view(['GET','POST'])
 def getnotperfomances(request):
     return Response({'data':nper})
+@api_view(['GET','POST'])
+def gettheater(request):
+    return Response({'data':theater})
+@api_view(['GET','POST'])
+def getkids(request):
+    return Response({'data':kids})
+@api_view(['GET','POST'])
+def getfestival(request):
+    return Response({'data':festival})

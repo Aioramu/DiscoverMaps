@@ -9,6 +9,9 @@ import  CustomersService  from  './ClientUp';
 import Popup from './Popup';
 import Recom from './Recom';
 import Events from './Events';
+import Festival from './Festival'
+import Theater from './Theater'
+import Kids from './Kids'
 const axios = require('axios').default;
 const  customersService  =  new  CustomersService();
 
@@ -32,6 +35,9 @@ class App extends Component{
       showEvents:false,
       showAll:true,
       showRecs:false,
+      showTheater:false,
+      showFestival:false,
+      showKids:false,
       token:'',
       login:'',
       password:'',
@@ -65,11 +71,44 @@ class App extends Component{
       showLogin:false,
     });
   }
+  toggleFestival() {
+    this.setState({
+      showAll:false,
+      showFestival: true,
+      showRecs:false,
+      showEvents:false,
+      showKids:false,
+      showTheater:false,
+    });
+  }
+  toggleKids() {
+    this.setState({
+      showAll:false,
+      showKids: true,
+      showRecs:false,
+      showEvents:false,
+      showFestival:false,
+      showTheater:false,
+    });
+  }
+  toggleTheater() {
+    this.setState({
+      showAll:false,
+      showTheater: true,
+      showRecs:false,
+      showEvents:false,
+      showKids:false,
+      showFestival:false,
+    });
+  }
   toggleEvents() {
     this.setState({
       showAll:false,
       showEvents: true,
       showRecs:false,
+      showKids:false,
+      showFestival:false,
+      showTheater:false,
     });
   }
   toggleRecs() {
@@ -77,6 +116,9 @@ class App extends Component{
       showAll:false,
       showEvents: false,
       showRecs:true,
+      showKids:false,
+      showFestival:false,
+      showTheater:false,
     });
   }
   login(event) {
@@ -174,6 +216,15 @@ render() {
                 <Nav.Link onClick={this.toggleEvents.bind(this)}> Мероприятия</Nav.Link>
               </Nav.Item>
               <Nav.Item>
+                <Nav.Link onClick={this.toggleTheater.bind(this)}> Театры и спектакли</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link onClick={this.toggleKids.bind(this)}> Для Детей</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link onClick={this.toggleFestival.bind(this)}> Фестивали</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
                 <Nav.Link onClick={this.toggleRecs.bind(this)}> Специально для вас</Nav.Link>
               </Nav.Item>
           </Nav>
@@ -216,7 +267,15 @@ closePopup={this.togglePopup.bind(this)}
 }
 </Container>
 
-
+{this.state.showFestival ?
+<Festival/> :null
+}
+{this.state.showKids ?
+<Kids/> :null
+}
+{this.state.showTheater ?
+<Theater/> :null
+}
   {this.state.showEvents ?
   <Events/> :null
 }

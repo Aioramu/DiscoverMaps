@@ -127,4 +127,64 @@ def events():
             except:
                 pass
     return deyn
+def festival():
+    deyn={"type":"FeatureCollection"}#обязательное начало
+    deyn['features']=[]
+    #claim=ApiJson(time,filename2)
+    for i in range(len(claim)):
+        if claim[i]['categories'][0]=='festival':
+
+            try:
+                coor=[claim[i]['place']['coords']['lat'],claim[i]['place']['coords']['lon']]
+                st=claim[i]['place']['site_url']
+                cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":
+                {"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+claim[i]['site_url']+"'>"+claim[i]['title']+"</a></b></font>",
+                "balloonContentBody":"<p><a href='"+claim[i]['place']['site_url']+"'>"+claim[i]['place']['title']+"</a></p>"+claim[i]['place']['address']+"<p><p>"
+                +claim[i]['place']['subway']+"</p><p><button onClick=sendlike() value='"+str(i)+"'>Like</button></p>","clusterCaption":"<font size=3><b><p target='_blank'>"
+                +claim[i]['title']+"</p></b></font>",
+                 "hintContent": "<strong>"+claim[i]['place']['address']+"</strong>"}}
+                deyn['features'].append(cl)
+            except:
+                pass
+    return deyn
+def theater():
+    deyn={"type":"FeatureCollection"}#обязательное начало
+    deyn['features']=[]
+    #claim=ApiJson(time,filename2)
+    for i in range(len(claim)):
+        if claim[i]['categories'][0]=='theater' and claim[i]['categories'][0]!='concert':
+
+            try:
+                coor=[claim[i]['place']['coords']['lat'],claim[i]['place']['coords']['lon']]
+                st=claim[i]['place']['site_url']
+                cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":
+                {"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+claim[i]['site_url']+"'>"+claim[i]['title']+"</a></b></font>",
+                "balloonContentBody":"<p><a href='"+claim[i]['place']['site_url']+"'>"+claim[i]['place']['title']+"</a></p>"+claim[i]['place']['address']+"<p><p>"
+                +claim[i]['place']['subway']+"</p><p><button onClick=sendlike() value='"+str(i)+"'>Like</button></p>","clusterCaption":"<font size=3><b><p target='_blank'>"
+                +claim[i]['title']+"</p></b></font>",
+                 "hintContent": "<strong>"+claim[i]['place']['address']+"</strong>"}}
+                deyn['features'].append(cl)
+            except:
+                pass
+    return deyn
+def kids():
+    deyn={"type":"FeatureCollection"}#обязательное начало
+    deyn['features']=[]
+    #claim=ApiJson(time,filename2)
+    for i in range(len(claim)):
+        if claim[i]['categories'][0]=='kids':
+
+            try:
+                coor=[claim[i]['place']['coords']['lat'],claim[i]['place']['coords']['lon']]
+                st=claim[i]['place']['site_url']
+                cl={"type": "Feature", "id": str(i), "geometry":{"type": "Point", "coordinates":coor},"properties":
+                {"balloonContentHeader":"<font size=3><b><a target='_blank' href='"+claim[i]['site_url']+"'>"+claim[i]['title']+"</a></b></font>",
+                "balloonContentBody":"<p><a href='"+claim[i]['place']['site_url']+"'>"+claim[i]['place']['title']+"</a></p>"+claim[i]['place']['address']+"<p><p>"
+                +claim[i]['place']['subway']+"</p><p><button onClick=sendlike() value='"+str(i)+"'>Like</button></p>","clusterCaption":"<font size=3><b><p target='_blank'>"
+                +claim[i]['title']+"</p></b></font>",
+                 "hintContent": "<strong>"+claim[i]['place']['address']+"</strong>"}}
+                deyn['features'].append(cl)
+            except:
+                pass
+    return deyn
     #print(ApiJson(time,filename2))
