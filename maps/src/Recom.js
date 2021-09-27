@@ -25,7 +25,6 @@ class Recom extends Component{
   headers:{"Authorization":'Token '+localStorage.getItem("token")
   }
 }).then(res => {
-  console.log("Recom",res.data)
       this.setState({
         isLoaded: true,
         items: res.data
@@ -46,7 +45,9 @@ class Recom extends Component{
   render() {
     const { error, isLoaded, items } = this.state;
     //console.log(this.state.items,this.state.items.data)
-    var coord=items.data
+    console.log(items)
+    var coord=items
+    console.log("rec coord",coord)
     //console.log(localStorage.getItem("token"))
     if (localStorage.getItem("token") !='') {
       return( <YMaps >

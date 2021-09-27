@@ -2,14 +2,23 @@ import requests
 import time
 import json
 import random
+
 filename='maps/src/places.json'
 global filename2
 filename2='places2.json'
 global time
+import pymongo
+from pymongo import MongoClient
 time=int(time.time())
 
+client = MongoClient('172.29.0.1:27018',username='username',password='RooTpasS',authSource='admin')
 
+db = client['db_name']
 
+events_collection=db.events
+performance_collection=db.performance
+all_collection=db.all
+tags_collection=db.tags
 def ApiJson(time,filename):
     response=requests.get('https://kudago.com/public-api/v1.4/events/?fields=place,title,address,site_url,coords,categories,tags&location=msk&expand=place&actual_since='+str(time))
 
@@ -110,6 +119,7 @@ def performance():
 def events():
     deyn={"type":"FeatureCollection"}#обязательное начало
     deyn['features']=[]
+    events=events_collection.find_one()
     #claim=ApiJson(time,filename2)
     for i in range(len(claim)):
         if claim[i]['categories'][0]!='theater' and claim[i]['categories'][0]!='concert':
@@ -127,4 +137,16 @@ def events():
             except:
                 pass
     return deyn
+event=events()
+all=slave()
+performanc=performance()
+tags=tags()
+def writer():
+
+    event_write=events_collection.insert_one(event)
+    all_write=all_collection.insert_one(all)
+    performance_write=performance_collection.insert_one(performanc)
+    tags_write=tags_collection.insert_one(tags)
+    return 0
     #print(ApiJson(time,filename2))
+#writer()

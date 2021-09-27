@@ -1,7 +1,7 @@
 # This project is a general map of Moscow with various events displayed on it.
 ## Currently used API: Yandex maps,kudago
 # Technologies: Python Django,Django rest framework, React js. npm (npx) packets.
-## Project posted here: http://185.244.172.149/
+
 ### Start guide:
 #### 1. install docker and docker-compose
 #### 2. just build and up a container (dont forget migrate database)

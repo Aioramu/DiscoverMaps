@@ -5,7 +5,7 @@ from django.views import generic
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from rest_framework import status, permissions
-from . import req
+#from . import req
 from django.contrib.auth.models import User
 from collections import Counter
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -19,24 +19,24 @@ from .models import Lovely,Prefer
 from .serializer import *
 from .tasks import create_recs
 from datetime import date
+import pymongo
+from pymongo import MongoClient
+from bson import json_util
+import json
+
+connection_string = 'mongodb://username:RooTpasS@mongodb/myFirstDatabase?retryWrites=true&w=majority'
+#client = MongoClient(connection_string)
+
+client = MongoClient('172.29.0.1:27018',username='username',password='RooTpasS',authSource='admin')
+
+db = client['db_name']
 
 #today = date.today()
 User = get_user_model()
-
-nper={"none":"none"}
-sae={"none":"none"}
-per={"none":"none"}
-tags={"none":"none"}
-data=1
-def Pivo():#need server timer!
-    print("chooo")
-    global nper,per,sae,tags
-    sae=req.slave()#all what you wants
-    per=req.performance()#include theater and concerts
-    nper=req.events()#exclude theater and concerts
-    tags=req.tags()#all ids with category and tags
-Pivo()
-
+events_collection=db.events
+performance_collection=db.performance
+all_collection=db.all
+tags_collection=db.tags
 
 class ExampleView(APIView):
     permission_classes = [permissions.IsAuthenticated]#only for auth user
@@ -54,7 +54,9 @@ class ExampleView(APIView):
             billy=str(rec.category1)
             ids=[]
             counter=0
-            for i in tags:
+            tags=tags_collection.find_one()
+            tags=json.loads(json_util.dumps(tags))
+            for i in tags['items']:
                 for t in i['tags']:
                     if t==v or t==back:
                         for p in i['categories']:
@@ -64,12 +66,14 @@ class ExampleView(APIView):
                                 ids.append(int(i['id']))
 
             ban=[]
-            for i in sae['features']:
+            data=performance_collection.find_one()
+            data=json.loads(json_util.dumps(data))
+            for i in data['features']:
                 if int(i['id']) in ids:
                     ban.append(i)
-            #print(ban)
-            return Response({'data':{"type": "FeatureCollection",
-            "features":ban}})
+            print(ban)
+            return Response({"type": "FeatureCollection",
+            "features":ban})
 
 @api_view(['GET','POST'])#registration on base django model
 def NewUser(request):
@@ -177,8 +181,13 @@ def like_button(request):#request to lie button
         user="sda"
         user=User.objects.get(username=userid)
         events="wrong event"
-        for t in tags:
+        tags=tags_collection.find_one()
+        tags=json.loads(json_util.dumps(tags))
+        #print(tags)
+        for t in tags['items']:
+            #print(t,event)
             if t['id']==event:
+
                 #print(t['id'],t['tags'],t['categories'])
                 for i in t['tags']:
                     if i==t['tags'][0]:
@@ -197,17 +206,21 @@ def like_button(request):#request to lie button
 
 @api_view(['GET','POST'])
 def getlist(request):
-    global data
-    today=date.today()
-    today=today.strftime("%d")
-    if data!=int(today):
-        data=int(today)
-        Pivo()
-    return Response({'data': sae})
+    data=all_collection.find_one()
+    data=json.loads(json_util.dumps(data))
+    print(type(data))
+    del data['_id']
+    return Response({'data': data})
 
 @api_view(['GET','POST'])
-def getperfomances(request):#only pers
-    return Response({'data':per})
+def getperfomances(request):
+    data=performance_collection.find_one()
+    data=json.loads(json_util.dumps(data))
+    print(type(data))#only pers
+    return Response({'data':data})
 @api_view(['GET','POST'])
 def getnotperfomances(request):
-    return Response({'data':nper})
+    data=events_collection.find_one()
+    data=json.loads(json_util.dumps(data))
+    print(type(data))
+    return Response({'data':data})

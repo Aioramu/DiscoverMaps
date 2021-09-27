@@ -143,8 +143,7 @@ window.location.reload()
   pasChange(event) {    this.setState({password: event.target.value});  }
 render() {
   const { error, isLoaded, items } = this.state;
-  console.log(this.state.value)
-  console.log(this.state.items)
+
   var coord=items.data
   console.log(coord)
   if (!isLoaded) {
@@ -225,41 +224,41 @@ closePopup={this.togglePopup.bind(this)}
 }
 
   {this.state.showAll ?<YMaps >
-  <Map
-    defaultState={{
-      center: [55.751605, 37.621508],
-      zoom: 12,
-    }}
-    width={"100%"} height={800}>
-    <ObjectManager
-      options={{
-        clusterDisableClickZoom: true,
-        clusterize: true,
-        gridSize: 32,
-
+    <Map
+      defaultState={{
+        center: [55.751605, 37.621508],
+        zoom: 12,
       }}
-      objects={{
-        clusterDisableClickZoom: true,
-        openBalloonOnClick: true,
-        preset: 'islands#greenDotIcon',
-      }}
-      clusters={{
-        clusterDisableClickZoom: true,
-        preset: 'islands#redClusterIcons',
-      }}
-      filter={object => object.id % 2 === 0}
+      width={"100%"} height={800}>
+      <ObjectManager
+        options={{
+          clusterDisableClickZoom: true,
+          clusterize: true,
+          gridSize: 32,
 
-      //defaultFeatures={this.state.items}
+        }}
+        objects={{
+          clusterDisableClickZoom: true,
+          openBalloonOnClick: true,
+          preset: 'islands#greenDotIcon',
+        }}
+        clusters={{
+          clusterDisableClickZoom: true,
+          preset: 'islands#redClusterIcons',
+        }}
+        filter={object => object.id % 2 === 0}
 
-      defaultFeatures={coord['features']}
-      modules={[
-        'objectManager.addon.clustersBalloon',
-        'objectManager.addon.clustersHint',
-        'objectManager.addon.objectsBalloon',
-        'objectManager.addon.objectsHint',
-      ]}
-    />
-  </Map>
+        //defaultFeatures={this.state.items['features']}
+
+        defaultFeatures={coord}
+        modules={[
+          'objectManager.addon.clustersBalloon',
+          'objectManager.addon.clustersHint',
+          'objectManager.addon.objectsBalloon',
+          'objectManager.addon.objectsHint',
+        ]}
+      />
+    </Map>
 </YMaps>
 :null }
 </div>

@@ -10,3 +10,5 @@ schedule
 redis
 celery
 django-celery-results
+pymongo[snappy,gssapi,srv,tls]
+dnspython

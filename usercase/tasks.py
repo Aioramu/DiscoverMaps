@@ -56,7 +56,10 @@ def create_recs(userid):
         elif f<j<=r:
             f=j
             billy=i
-    
+    try:
+        Prefer.objects.get(user=user)
+    except:
+        Prefer.objects.create(user=user)
     like=Prefer.objects.filter(user=user)
     for model in like:
         model.tag1=str(back)
